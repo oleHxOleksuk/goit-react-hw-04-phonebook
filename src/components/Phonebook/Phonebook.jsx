@@ -40,12 +40,15 @@ class Phonebook extends Component {
     e.preventDefault();
     this.setState(prevState=>{
       const {name,number,items}=prevState;
+      if (this.isDublicate(name)){
+        return alert(`${name} is already in contacts`)
+      }
       const newContact = {
         id: nanoid(),
         name,
         number,
       }
-      return {items:[newContact,...items]}
+      return {items:[newContact,...items],name:'', number:''}
     })
   }
   handleChange =({target})=>{
@@ -53,6 +56,14 @@ class Phonebook extends Component {
     this.setState({
       [name]:value
     })
+  }
+  isDublicate(name){
+    const normalized = name.toLowerCase();
+    const {items} = this.state;
+    const people = items.find(({name})=>{
+      return(name.toLowerCase() === normalized)
+    })
+    return Boolean(people)
   }
   render() {
     const{addContact,handleChange}=this;
