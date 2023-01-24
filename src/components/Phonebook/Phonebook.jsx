@@ -1,6 +1,6 @@
 import {Component} from "react";
 import {nanoid} from "nanoid";
-import styles from "./phonebook.module.scss"
+import styles from "./phonebook.module.scss";
 
 class Phonebook extends Component {
   state ={
@@ -24,25 +24,55 @@ class Phonebook extends Component {
         id: nanoid(),
         name: 'Annie Copeland',
         number: '445-67-12',
+      },
+    ],
+    name:'',
+    number:'',
+  }
+  removeContact(id){
+    this.setState(({items})=>{
+      const newContacts = items.filter(item=>item.id !== id);
+      return{items: newContacts}
       }
-    ]
+    )
+  }
+  addContact = (e)=>{
+    e.preventDefault();
+    this.setState(prevState=>{
+      const {name,number,items}=prevState;
+      const newContact = {
+        id: nanoid(),
+        name,
+        number,
+      }
+      return {items:[newContact,...items]}
+    })
+  }
+  handleChange =({target})=>{
+    const {name, value}=target;
+    this.setState({
+      [name]:value
+    })
   }
   render() {
+    const{addContact,handleChange}=this;
     const {items} = this.state;
-    const contacts = items.map(({id,name,number})=> <li key={id}>{name}: {number} <button type='button'>Delete</button></li>)
+    const contacts = items.map(({id,name,number})=> <li key={id}>{name}: {number} <button onClick={()=>this.removeContact(id)} type='button'>Delete</button></li>)
     return(
       <div>
         <h2>Phonebook</h2>
         <div className={styles.wrapper}>
           <div className={styles.block}>
-            <form>
+            <form onSubmit={addContact}>
               <div className={styles.formGroup}>
                 <label>Name</label>
-                <input placeholder='name'/>
+                <input name='name' onChange={handleChange} placeholder='name' required/>
               </div>
               <div className={styles.formGroup}>
                 <label>Number</label>
                 <input
+                  name='number'
+                  onChange={handleChange}
                   type='tel'
                   placeholder='number'
                   title='Phone number must be digits and can contain spaces, dashes, parentheses and can start with +'
