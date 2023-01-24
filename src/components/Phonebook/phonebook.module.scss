@@ -1,0 +1,16 @@
+.wrapper{
+  display: grid;
+  grid-template-rows: 200px 200px;
+  gap: 30px;
+}
+.block{
+  border: 1px solid;
+  border-radius: 5px;
+  padding: 15px;
+}
+.formGroup{
+  display: grid;
+  grid-template-columns:50px 1fr;
+  gap: 20px;
+  margin-bottom: 15px;
+}
