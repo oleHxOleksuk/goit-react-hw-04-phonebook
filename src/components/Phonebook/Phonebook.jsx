@@ -28,6 +28,7 @@ class Phonebook extends Component {
     ],
     name:'',
     number:'',
+    filter:'',
   }
   removeContact(id){
     this.setState(({items})=>{
@@ -65,9 +66,18 @@ class Phonebook extends Component {
     })
     return Boolean(people)
   }
+  getFilterContact(){
+    const {filter,items} = this.state
+    const normalizedFilter = filter.toLowerCase()
+    const result = items.filter(({name}) =>{
+      return (name.toLowerCase().includes(normalizedFilter))
+    })
+    return result
+  }
   render() {
     const{addContact,handleChange}=this;
-    const {items,number,name} = this.state;
+    const {number,name} = this.state;
+    const items = this.getFilterContact()
     const contacts = items.map(({id,name,number})=> <li key={id}>{name}: {number} <button onClick={()=>this.removeContact(id)} type='button'>Delete</button></li>)
     return(
       <div>
@@ -98,7 +108,7 @@ class Phonebook extends Component {
             <h2>Contact</h2>
             <div className={styles.formGroup}>
               <label>Find contacts by name</label>
-              <input placeholder='name'/>
+              <input name='filter' onChange={handleChange} placeholder='name'/>
             </div>
             <ol>
               {contacts}
