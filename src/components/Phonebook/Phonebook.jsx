@@ -56,7 +56,7 @@ class Phonebook extends Component {
   }
   render() {
     const{addContact,handleChange}=this;
-    const {items} = this.state;
+    const {items,number,name} = this.state;
     const contacts = items.map(({id,name,number})=> <li key={id}>{name}: {number} <button onClick={()=>this.removeContact(id)} type='button'>Delete</button></li>)
     return(
       <div>
@@ -66,11 +66,12 @@ class Phonebook extends Component {
             <form onSubmit={addContact}>
               <div className={styles.formGroup}>
                 <label>Name</label>
-                <input name='name' onChange={handleChange} placeholder='name' required/>
+                <input value={name} name='name' onChange={handleChange} placeholder='name' required/>
               </div>
               <div className={styles.formGroup}>
                 <label>Number</label>
                 <input
+                  value={number}
                   name='number'
                   onChange={handleChange}
                   type='tel'
