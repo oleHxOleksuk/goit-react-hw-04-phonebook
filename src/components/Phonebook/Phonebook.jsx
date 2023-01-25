@@ -1,49 +1,31 @@
 import {Component} from "react";
 import {nanoid} from "nanoid";
+
+import items from "../items";
+import ContactList from "../ContactList/ContactList";
+import ContactFilter from "../Filter/Filter";
+import ContactForm from "../ContactForm/ContactForm";
 import styles from "./phonebook.module.scss";
 
 class Phonebook extends Component {
   state ={
-    items:[
-      {
-        id: nanoid(),
-        name: 'Rosie Simpson',
-        number: '459-12-56',
-      },
-      {
-        id: nanoid(),
-        name: 'Hermione Kline',
-        number: '498-45-90',
-      },
-      {
-        id: nanoid(),
-        name: 'Eden Clements',
-        number: '467-17-79',
-      },
-      {
-        id: nanoid(),
-        name: 'Annie Copeland',
-        number: '445-67-12',
-      },
-    ],
-    name:'',
-    number:'',
+    items:[...items],
+
     filter:'',
   }
-  removeContact(id){
+  removeContact=(id)=>{
     this.setState(({items})=>{
       const newContacts = items.filter(item=>item.id !== id);
       return{items: newContacts}
       }
     )
   }
-  addContact = (e)=>{
-    e.preventDefault();
-    this.setState(prevState=>{
-      const {name,number,items}=prevState;
+  addContact = ({name,number})=>{
       if (this.isDublicate(name)){
         return alert(`${name} is already in contacts`)
       }
+      this.setState(prevState =>{
+        const {items}=prevState
       const newContact = {
         id: nanoid(),
         name,
@@ -52,12 +34,7 @@ class Phonebook extends Component {
       return {items:[newContact,...items],name:'', number:''}
     })
   }
-  handleChange =({target})=>{
-    const {name, value}=target;
-    this.setState({
-      [name]:value
-    })
-  }
+
   isDublicate(name){
     const normalized = name.toLowerCase();
     const {items} = this.state;
@@ -68,6 +45,9 @@ class Phonebook extends Component {
   }
   getFilterContact(){
     const {filter,items} = this.state
+    if (!filter){
+      return items;
+    }
     const normalizedFilter = filter.toLowerCase()
     const result = items.filter(({name}) =>{
       return (name.toLowerCase().includes(normalizedFilter))
@@ -75,44 +55,20 @@ class Phonebook extends Component {
     return result
   }
   render() {
-    const{addContact,handleChange}=this;
+    const{addContact,handleChange,removeContact}=this;
     const {number,name} = this.state;
     const items = this.getFilterContact()
-    const contacts = items.map(({id,name,number})=> <li key={id}>{name}: {number} <button onClick={()=>this.removeContact(id)} type='button'>Delete</button></li>)
     return(
       <div>
-        <h2>Phonebook</h2>
+        <h1>Phonebook</h1>
         <div className={styles.wrapper}>
           <div className={styles.block}>
-            <form onSubmit={addContact}>
-              <div className={styles.formGroup}>
-                <label>Name</label>
-                <input value={name} name='name' onChange={handleChange} placeholder='name' required/>
-              </div>
-              <div className={styles.formGroup}>
-                <label>Number</label>
-                <input
-                  value={number}
-                  name='number'
-                  onChange={handleChange}
-                  type='tel'
-                  placeholder='number'
-                  title='Phone number must be digits and can contain spaces, dashes, parentheses and can start with +'
-                  pattern='\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}'
-                  required/>
-              </div>
-              <button type='submit'>Add contact</button>
-            </form>
+            <ContactForm onSubmit={addContact}/>
           </div>
           <div className={styles.block}>
             <h2>Contact</h2>
-            <div className={styles.formGroup}>
-              <label>Find contacts by name</label>
-              <input name='filter' onChange={handleChange} placeholder='name'/>
-            </div>
-            <ol>
-              {contacts}
-            </ol>
+            <ContactFilter handleChange={handleChange}/>
+            <ContactList removeContact={removeContact} items={items}/>
           </div>
         </div>
       </div>
