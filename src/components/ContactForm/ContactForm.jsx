@@ -1,22 +1,19 @@
 import {Component} from "react";
+import inititalState from "./initialState";
 import styles from "../Phonebook/phonebook.module.scss";
 class ContactForm extends Component {
-  state ={
-    name:'',
-    number:'',
-  }
+  state = {...inititalState}
   handleSubmit = (e) =>{
     e.preventDefault();
     const {onSubmit}=this.props;
     onSubmit({...this.state});
     this.reset();
   }
-  reset(){
-    this.setState({
-      title:'',
-      number:'',
-    })
-  }
+
+  reset() {
+        this.setState({...inititalState})
+    }
+    
   handleChange =({target})=>{
     const {name, value}=target;
     this.setState({

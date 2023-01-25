@@ -61,7 +61,7 @@ class Phonebook extends Component {
   }
   render() {
     const{addContact,handleFilter,removeContact}=this;
-    const {number,name} = this.state;
+    
     const items = this.getFilterContact()
     return(
       <div>
