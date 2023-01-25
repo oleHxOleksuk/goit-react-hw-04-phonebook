@@ -22,7 +22,8 @@ class Phonebook extends Component {
   }
   addContact = ({name,number})=>{
       if (this.isDublicate(name)){
-        return alert(`${name} is already in contacts`)
+         alert(`${name} is already in contacts`)
+        return false
       }
       this.setState(prevState =>{
         const {items}=prevState
@@ -31,9 +32,13 @@ class Phonebook extends Component {
         name,
         number,
       }
-      return {items:[newContact,...items],name:'', number:''}
+      return {items:[newContact,...items]}
     })
+    return true
   }
+  handleFilter = ({target})=> {
+    this.setState({filter: target.value})
+}
 
   isDublicate(name){
     const normalized = name.toLowerCase();
@@ -55,7 +60,7 @@ class Phonebook extends Component {
     return result
   }
   render() {
-    const{addContact,handleChange,removeContact}=this;
+    const{addContact,handleFilter,removeContact}=this;
     const {number,name} = this.state;
     const items = this.getFilterContact()
     return(
@@ -67,7 +72,7 @@ class Phonebook extends Component {
           </div>
           <div className={styles.block}>
             <h2>Contact</h2>
-            <ContactFilter handleChange={handleChange}/>
+            <ContactFilter handleChange={handleFilter}/>
             <ContactList removeContact={removeContact} items={items}/>
           </div>
         </div>
