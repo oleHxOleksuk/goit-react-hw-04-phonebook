@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import { nanoid } from 'nanoid';
 
+import styles from './phonebook.module.scss'
 import items from '../items';
 import ContactList from '../ContactList/ContactList';
 import ContactFilter from '../Filter/Filter';
@@ -63,11 +64,13 @@ class Phonebook extends Component {
     const items = this.getFilterContact();
     return (
       <div>
+        <div className={styles.phonebook}>
         <h1>Phonebook</h1>
         <ContactForm onSubmit={addContact} />
         <h2>Contact</h2>
         <ContactFilter handleChange={handleFilter} />
         <ContactList removeContact={removeContact} items={items} />
+        </div>
       </div>
     );
   }
