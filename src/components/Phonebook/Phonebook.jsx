@@ -2,7 +2,9 @@ import { Component } from 'react';
 import { nanoid } from 'nanoid';
 
 import styles from './phonebook.module.scss'
+
 import items from '../items';
+
 import ContactList from '../ContactList/ContactList';
 import ContactFilter from '../Filter/Filter';
 import ContactForm from '../ContactForm/ContactForm';
@@ -10,7 +12,6 @@ import ContactForm from '../ContactForm/ContactForm';
 class Phonebook extends Component {
   state = {
     items: [...items],
-
     filter: '',
   };
 
@@ -34,6 +35,7 @@ class Phonebook extends Component {
       return { items: newContacts };
     });
   };
+
   addContact = ({ name, number }) => {
     if (this.isDublicate(name)) {
       alert(`${name} is already in contacts`);
@@ -50,6 +52,7 @@ class Phonebook extends Component {
     });
     return true;
   };
+
   handleFilter = ({ target }) => {
     this.setState({ filter: target.value });
   };
@@ -62,17 +65,20 @@ class Phonebook extends Component {
     });
     return Boolean(people);
   }
+
   getFilterContact() {
     const { filter, items } = this.state;
     if (!filter) {
       return items;
     }
+
     const normalizedFilter = filter.toLowerCase();
     const result = items.filter(({ name }) => {
       return name.toLowerCase().includes(normalizedFilter);
     });
     return result;
   }
+
   render() {
     const { addContact, handleFilter, removeContact } = this;
 
