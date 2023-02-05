@@ -14,8 +14,8 @@ const ContactList = ({ items, removeContact }) => {
     </li>
   ));
   return (
-    <div className={styles.wraperContactList}>
-      <ol className={styles.contactList}>{contacts}</ol>
+    <div>
+      <ol>{contacts}</ol>
     </div>
   );
 };
